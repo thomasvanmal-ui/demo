@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akura Villas — Luxury Real Estate Development in Bali</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            batu:   '#3A4034',
+            padang: '#93A275',
+            kayu:   '#76655C',
+            padi:   '#EEEDEB',
+            kabut:  '#4A4741',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            body:    ['"DM Sans"', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --batu:   #3A4034;
+      --padang: #93A275;
+      --kayu:   #76655C;
+      --padi:   #EEEDEB;
+      --kabut:  #4A4741;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-family: 'DM Sans', system-ui, sans-serif; }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.45s; }
+
+    /* Nav */
+    #nav { transition: background-color 0.3s ease, box-shadow 0.3s ease; }
+    #nav.scrolled {
+      background-color: var(--padi);
+      box-shadow: 0 1px 0 rgba(58,64,52,0.08), 0 4px 24px rgba(58,64,52,0.05);
+    }
+    .nav-link {
+      position: relative;
+      color: var(--padi);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      opacity: 0.75;
+      transition: opacity 0.2s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: currentColor;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-link:hover { opacity: 1; }
+    .nav-link:hover::after { width: 100%; }
+    #nav.scrolled .nav-link { color: var(--batu); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+                  transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.25s ease;
+    }
+    .btn:focus-visible { outline: 2px solid var(--padang); outline-offset: 3px; }
+    .btn:active { transform: scale(0.97) !important; }
+
+    .btn-dark {
+      background: var(--batu); color: var(--padi);
+      border: 1.5px solid var(--batu);
+    }
+    .btn-dark:hover { background: transparent; color: var(--batu); }
+
+    .btn-ghost-light {
+      background: transparent; color: var(--padi);
+      border: 1.5px solid rgba(238,237,235,0.35);
+    }
+    .btn-ghost-light:hover {
+      background: rgba(238,237,235,0.08);
+      border-color: rgba(238,237,235,0.6);
+    }
+
+    .btn-wa {
+      background: #25D366; color: #fff;
+      border: 1.5px solid #25D366;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+    }
+    .btn-wa:hover {
+      background: #1ebe5d;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Project card */
+    .project-card { overflow: hidden; border-radius: 3px; }
+    .project-card .thumb { overflow: hidden; }
+    .project-card .thumb img {
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .project-card:hover .thumb img,
+    .project-card:focus-within .thumb img { transform: scale(1.05); }
+    .project-card:focus-visible { outline: 2px solid var(--padang); outline-offset: 3px; }
+
+    /* Progress */
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Tag */
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    /* WhatsApp float */
+    .wa-float {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.3s ease;
+    }
+    .wa-float:hover { transform: scale(1.06) translateY(-2px); }
+    .wa-float:active { transform: scale(0.96); }
+    .wa-float:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+    /* Divider lines */
+    .eyebrow { display: flex; align-items: center; gap: 12px; }
+    .eyebrow-line { width: 28px; height: 1px; background: var(--padang); flex-shrink: 0; }
+    .eyebrow-text {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--padang);
+    }
+
+    /* USP grid separator */
+    @media (min-width: 768px) {
+      .usp-grid > * + * { border-left: 1px solid rgba(238,237,235,0.08); }
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--padi); }
+    ::-webkit-scrollbar-thumb { background: var(--padang); border-radius: 2px; }
+  </style>
+</head>
+<body class="bg-padi" style="color: var(--kabut);">
+
+<!-- ══════════════════════════════════════════
+     NAV
+══════════════════════════════════════════ -->
+<nav id="nav" class="fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-[72px]">
+    <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-padang rounded-sm">
+      <img src="brand assets/2.png" alt="Akura Villas" id="logo-light" class="h-9 w-auto">
+      <img src="brand assets/1.png" alt="Akura Villas" id="logo-dark" class="h-9 w-auto hidden">
+    </a>
+
+    <div class="hidden md:flex items-center gap-10">
+      <a href="#portfolio" class="nav-link">Portfolio</a>
+      <a href="#ongoing" class="nav-link">Ongoing</a>
+      <a href="#philosophy" class="nav-link">Philosophy</a>
+      <a href="#contact" class="btn btn-ghost-light" style="padding: 9px 20px; font-size: 11px;" id="nav-cta">
+        Enquire
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </a>
+    </div>
+
+    <button id="mob-btn" class="md:hidden p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-padang" aria-label="Toggle menu">
+      <span class="block w-5 h-px mb-1.5" style="background:var(--padi); transition: transform 0.25s ease;" id="h1"></span>
+      <span class="block w-5 h-px mb-1.5" style="background:var(--padi); transition: opacity 0.25s ease;" id="h2"></span>
+      <span class="block w-5 h-px" style="background:var(--padi); transition: transform 0.25s ease;" id="h3"></span>
+    </button>
+  </div>
+
+  <div id="mob-menu" class="md:hidden hidden px-6 pb-6 pt-2 flex flex-col gap-5" style="background: var(--padi);">
+    <a href="#portfolio" class="font-body text-sm font-medium" style="color: var(--batu);">Portfolio</a>
+    <a href="#ongoing" class="font-body text-sm font-medium" style="color: var(--batu);">Ongoing</a>
+    <a href="#philosophy" class="font-body text-sm font-medium" style="color: var(--batu);">Philosophy</a>
+    <a href="#contact" class="btn btn-dark self-start">Enquire</a>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section class="relative min-h-screen flex flex-col justify-end overflow-hidden" style="background: var(--batu);">
+  <!-- BG image -->
+  <div class="absolute inset-0 z-0">
+    <img src="https://placehold.co/1920x1080/3A4034/4A4741?text=." alt="" aria-hidden="true" class="w-full h-full object-cover" style="opacity:0.45;">
+    <!-- Layered gradients -->
+    <div class="absolute inset-0" style="background:
+      radial-gradient(ellipse at 25% 35%, rgba(147,162,117,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 75%, rgba(118,101,92,0.22) 0%, transparent 50%),
+      linear-gradient(180deg, rgba(58,64,52,0.05) 0%, rgba(58,64,52,0.5) 55%, rgba(58,64,52,0.97) 100%);"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 pb-0 w-full">
+    <div class="pb-20 lg:pb-28">
+      <div class="eyebrow reveal mb-7">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">Luxury Real Estate · Bali, Indonesia</span>
+      </div>
+
+      <h1 class="font-display font-light reveal delay-1" style="font-size: clamp(54px, 9vw, 118px); letter-spacing: -0.03em; color: var(--padi); line-height: 0.92; margin-bottom: 28px;">
+        Where Land<br>
+        <em style="font-style:italic; color: var(--padang);">Becomes</em><br>
+        Legacy
+      </h1>
+
+      <p class="font-body font-light reveal delay-2" style="font-size: 17px; color: rgba(238,237,235,0.68); line-height: 1.75; max-width: 420px; margin-bottom: 44px;">
+        Akura Villas crafts premium residential developments across Bali's most coveted landscapes — rooted in nature, built to endure.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 reveal delay-3">
+        <a href="https://wa.me/62XXXXXXXXXX?text=Hello%2C%20I%27m%20interested%20in%20Akura%20Villas" class="btn btn-wa" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat on WhatsApp
+        </a>
+        <a href="#portfolio" class="btn btn-ghost-light">
+          View Portfolio
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats strip -->
+  <div class="relative z-10 w-full border-t" style="background: rgba(58,64,52,0.55); backdrop-filter: blur(16px); border-color: rgba(238,237,235,0.08);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 py-7 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="reveal">
+        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">12+</div>
+        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">Completed Villas</div>
+      </div>
+      <div class="reveal delay-1">
+        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">4</div>
+        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">Active Developments</div>
+      </div>
+      <div class="reveal delay-2">
+        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">8yr</div>
+        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">In Bali Market</div>
+      </div>
+      <div class="reveal delay-3">
+        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">18%</div>
+        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">Avg. Investor ROI</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PHILOSOPHY
+══════════════════════════════════════════ -->
+<section id="philosophy" style="background: var(--padi); padding: 100px 0 112px;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div>
+        <div class="eyebrow reveal mb-5">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Our Philosophy</span>
+        </div>
+        <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--batu); line-height: 1.02; margin-bottom: 24px;">
+          Rooted in Bali.<br>
+          <em style="font-style:italic;">Built with intention.</em>
+        </h2>
+        <p class="font-body font-light reveal delay-2" style="font-size: 15px; color: var(--kabut); line-height: 1.8; margin-bottom: 18px;">
+          The finest homes don't announce themselves — they settle quietly into the landscape, as if they were always meant to be there. Every Akura villa begins with the land, its contours, its light, its shadow.
+        </p>
+        <p class="font-body font-light reveal delay-3" style="font-size: 15px; color: var(--kabut); line-height: 1.8; margin-bottom: 44px;">
+          From the rice fields of Canggu to the cliffs of Uluwatu, we build with minimal footprint and maximum soul — honouring Bali's natural heritage while creating homes built to last generations.
+        </p>
+        <div class="grid grid-cols-2 gap-8 pt-8 reveal delay-4" style="border-top: 1px solid rgba(58,64,52,0.1);">
+          <div>
+            <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 6px;">Sustainability</div>
+            <div style="font-size: 13px; color: var(--kabut); line-height: 1.65;">Local materials, passive cooling, minimal land intervention</div>
+          </div>
+          <div>
+            <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 6px;">Community</div>
+            <div style="font-size: 13px; color: var(--kabut); line-height: 1.65;">Every project contributes to the local Balinese ecosystem</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 reveal delay-1">
+        <div style="border-radius: 3px; overflow: hidden; aspect-ratio: 4/5;">
+          <img src="https://placehold.co/400x500/76655C/EEEDEB?text=." alt="Bali landscape" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+        <div style="border-radius: 3px; overflow: hidden; aspect-ratio: 4/5; margin-top: 32px;">
+          <img src="https://placehold.co/400x500/3A4034/93A275?text=." alt="Villa interior" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     COMPLETED PORTFOLIO
+══════════════════════════════════════════ -->
+<section id="portfolio" style="background: var(--kabut); padding: 100px 0 112px;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
+      <div>
+        <div class="eyebrow reveal mb-5">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Completed Projects</span>
+        </div>
+        <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--padi); line-height: 1.02;">
+          The Akura<br>Portfolio
+        </h2>
+      </div>
+      <p class="font-body font-light reveal delay-2" style="font-size: 14px; color: rgba(238,237,235,0.5); line-height: 1.75; max-width: 300px;">
+        Twelve delivered projects across Bali's most desirable locations — each one a testament to craft and considered design.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <!-- Card 1 -->
+      <div class="project-card reveal" style="background: rgba(58,64,52,0.5);" tabindex="0">
+        <div class="thumb aspect-[4/3]">
+          <img src="https://placehold.co/800x600/3A4034/93A275?text=." alt="Villa Karang Sepi" class="w-full h-full object-cover">
+        </div>
+        <div style="padding: 24px;">
+          <span class="tag" style="background: rgba(147,162,117,0.15); color: var(--padang); margin-bottom: 10px;">Villa · 3 Bed</span>
+          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Villa Karang Sepi</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Uluwatu · Completed 2023</p>
+          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Cliff-edge villa with infinity pool overlooking the Indian Ocean. Built from local limestone and reclaimed timber.</p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="project-card reveal delay-1" style="background: rgba(58,64,52,0.5);" tabindex="0">
+        <div class="thumb aspect-[4/3]">
+          <img src="https://placehold.co/800x600/76655C/EEEDEB?text=." alt="Padi House" class="w-full h-full object-cover">
+        </div>
+        <div style="padding: 24px;">
+          <span class="tag" style="background: rgba(118,101,92,0.25); color: #c9b8b0; margin-bottom: 10px;">Compound · 5 Bed</span>
+          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Padi House</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Canggu · Completed 2022</p>
+          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Five-bedroom compound set amid working rice fields. A contemporary take on traditional Balinese compound living.</p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="project-card reveal delay-2" style="background: rgba(58,64,52,0.5);" tabindex="0">
+        <div class="thumb aspect-[4/3]">
+          <img src="https://placehold.co/800x600/93A275/3A4034?text=." alt="Hutan Villa" class="w-full h-full object-cover">
+        </div>
+        <div style="padding: 24px;">
+          <span class="tag" style="background: rgba(147,162,117,0.15); color: var(--padang); margin-bottom: 10px;">Villa · 2 Bed</span>
+          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Hutan Villa</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Ubud · Completed 2023</p>
+          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Forest-immersed retreat above the Ayung River Valley. Passive cooling architecture, zero imported materials.</p>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="project-card reveal" style="background: rgba(58,64,52,0.5);" tabindex="0">
+        <div class="thumb aspect-[4/3]">
+          <img src="https://placehold.co/800x600/4A4741/EEEDEB?text=." alt="Seminyak Residence" class="w-full h-full object-cover">
+        </div>
+        <div style="padding: 24px;">
+          <span class="tag" style="background: rgba(74,71,65,0.4); color: rgba(238,237,235,0.5); margin-bottom: 10px;">Residence · 4 Bed</span>
+          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Seminyak Residence</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Seminyak · Completed 2021</p>
+          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Boutique urban villa designed for investment. Consistently achieves 85%+ occupancy via short-term rental.</p>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="project-card reveal delay-1" style="background: rgba(58,64,52,0.5);" tabindex="0">
+        <div class="thumb aspect-[4/3]">
+          <img src="https://placehold.co/800x600/3A4034/76655C?text=." alt="Bukit Serenity" class="w-full h-full object-cover">
+        </div>
+        <div style="padding: 24px;">
+          <span class="tag" style="background: rgba(147,162,117,0.15); color: var(--padang); margin-bottom: 10px;">Villa · 6 Bed</span>
+          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Bukit Serenity</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Bukit Peninsula · Completed 2024</p>
+          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Grand hilltop estate with 270° ocean views. Six en-suites, private cinema, and a 25-metre lap pool.</p>
+        </div>
+      </div>
+
+      <!-- View all CTA tile -->
+      <div class="reveal delay-2 flex flex-col items-center justify-center p-10 border cursor-pointer" style="border-color: rgba(238,237,235,0.1); border-radius: 3px; min-height: 220px; transition: background 0.3s ease;" onmouseover="this.style.background='rgba(147,162,117,0.07)'" onmouseout="this.style.background='transparent'" tabindex="0" role="button">
+        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(147,162,117,0.12); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </div>
+        <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang);">View All 12 Projects</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     ONGOING PROJECTS
+══════════════════════════════════════════ -->
+<section id="ongoing" style="background: var(--padi); padding: 100px 0 112px;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="mb-14">
+      <div class="eyebrow reveal mb-5">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">Ongoing Developments</span>
+      </div>
+      <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--batu); line-height: 1.02;">
+        Currently<br>Under Development
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-7">
+
+      <!-- Ongoing 1 -->
+      <div class="reveal overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
+        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
+          <img src="https://placehold.co/800x450/3A4034/93A275?text=." alt="Sayan Heights" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--padang); color: var(--batu);">In Construction</span>
+        </div>
+        <div style="padding: 32px;">
+          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Sayan Heights</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Ubud · Est. Completion Q4 2025</p>
+          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Eight-villa estate perched above the Sayan Ridge. Each villa frames a unique perspective of the jungle canopy and Ayung valley below.</p>
+          <div style="margin-bottom: 24px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
+              <span style="font-size: 11px; font-weight:600; color:var(--batu);">72%</span>
+            </div>
+            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
+              <div class="progress-fill" data-width="72" style="width:0%; background: linear-gradient(to right, var(--padang), var(--batu));"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">8</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Villas</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">2–4</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ongoing 2 -->
+      <div class="reveal delay-1 overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
+        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
+          <img src="https://placehold.co/800x450/76655C/EEEDEB?text=." alt="Cliff House Bingin" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--kayu); color: var(--padi);">Pre-Launch</span>
+        </div>
+        <div style="padding: 32px;">
+          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Cliff House Bingin</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Bingin · Est. Completion Q2 2026</p>
+          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Four ultra-private cliff-side residences cantilevered over Bingin Beach. A rare opportunity in one of Bali's most exclusive surf locations.</p>
+          <div style="margin-bottom: 24px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
+              <span style="font-size: 11px; font-weight:600; color:var(--batu);">28%</span>
+            </div>
+            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
+              <div class="progress-fill" data-width="28" style="width:0%; background: linear-gradient(to right, var(--kayu), var(--batu));"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">4</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Residences</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">4–5</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">4</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ongoing 3 -->
+      <div class="reveal overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
+        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
+          <img src="https://placehold.co/800x450/93A275/3A4034?text=." alt="Pererenan Eco Estate" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--padang); color: var(--batu);">In Construction</span>
+        </div>
+        <div style="padding: 32px;">
+          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Pererenan Eco Estate</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Pererenan · Est. Completion Q1 2026</p>
+          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Six eco-certified villas with solar systems and rainwater harvesting. LEED-aligned construction, zero single-use plastics on site.</p>
+          <div style="margin-bottom: 24px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
+              <span style="font-size: 11px; font-weight:600; color:var(--batu);">55%</span>
+            </div>
+            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
+              <div class="progress-fill" data-width="55" style="width:0%; background: linear-gradient(to right, var(--padang), var(--batu));"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">6</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Villas</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">2</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ongoing 4 -->
+      <div class="reveal delay-1 overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
+        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
+          <img src="https://placehold.co/800x450/4A4741/93A275?text=." alt="Nyanyi Beachfront" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--kabut); color: var(--padi);">Planning</span>
+        </div>
+        <div style="padding: 32px;">
+          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Nyanyi Beachfront</h3>
+          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Nyanyi · Est. Completion Q3 2026</p>
+          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Three beachfront villas on one of Bali's last undeveloped black-sand beaches. Architectural concept by award-winning Balinese studio.</p>
+          <div style="margin-bottom: 24px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
+              <span style="font-size: 11px; font-weight:600; color:var(--batu);">12%</span>
+            </div>
+            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
+              <div class="progress-fill" data-width="12" style="width:0%; background: linear-gradient(to right, var(--kabut), var(--batu));"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Villas</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">5</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
+            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     WHY AKURA
+══════════════════════════════════════════ -->
+<section style="background: var(--batu); padding: 100px 0 112px;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="mb-14">
+      <div class="eyebrow reveal mb-5">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">Why Akura</span>
+      </div>
+      <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--padi); line-height: 1.02; max-width: 560px;">
+        The difference is in the details no one sees
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 usp-grid" style="border: 1px solid rgba(238,237,235,0.06); border-radius: 3px; overflow: hidden;">
+
+      <div class="reveal p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
+        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        </div>
+        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">Freehold Land</h3>
+        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">Every project is structured with verified freehold titles and PT PMA-compatible ownership for foreign investors.</p>
+      </div>
+
+      <div class="reveal delay-1 p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
+        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        </div>
+        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">On Time</h3>
+        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">100% on-time delivery record across all 12 completed projects. We commit to timelines and hold ourselves accountable.</p>
+      </div>
+
+      <div class="reveal delay-2 p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
+        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">Strong Returns</h3>
+        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">Investors across our portfolio average 18% annual ROI, backed by Bali's growing short-term rental demand.</p>
+      </div>
+
+      <div class="reveal delay-3 p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
+        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">Fully Managed</h3>
+        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">End-to-end management through Akura's hospitality arm — rental, maintenance, and ownership paperwork handled.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     CTA
+══════════════════════════════════════════ -->
+<section id="contact" class="relative overflow-hidden" style="background: var(--padi); padding: 100px 0 112px;">
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 70% 40%, rgba(147,162,117,0.13) 0%, transparent 55%), radial-gradient(ellipse at 15% 80%, rgba(118,101,92,0.09) 0%, transparent 50%);"></div>
+
+  <div class="relative max-w-3xl mx-auto px-6 lg:px-12 text-center">
+    <div class="eyebrow reveal justify-center mb-6">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Start a Conversation</span>
+      <div class="eyebrow-line"></div>
+    </div>
+
+    <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(44px, 7vw, 88px); letter-spacing: -0.03em; color: var(--batu); line-height: 0.92; margin-bottom: 24px;">
+      Your Bali villa<br>
+      <em style="font-style:italic; color: var(--padang);">starts here.</em>
+    </h2>
+
+    <p class="font-body font-light reveal delay-2" style="font-size: 16px; color: var(--kabut); line-height: 1.8; max-width: 460px; margin: 0 auto 48px;">
+      Whether you're investing, building a home, or exploring options — the fastest way to reach us is WhatsApp. We're in Bali and respond within hours.
+    </p>
+
+    <div class="reveal delay-3 flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="https://wa.me/62XXXXXXXXXX?text=Hello%20Akura%20Villas%2C%20I%27m%20interested%20in%20learning%20more." class="btn btn-wa" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Message on WhatsApp
+      </a>
+      <a href="mailto:hello@akuravillas.com" class="btn btn-dark">Send an Email</a>
+    </div>
+
+    <div class="reveal delay-4 grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-12" style="border-top: 1px solid rgba(58,64,52,0.1);">
+      <div>
+        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Bali Office</div>
+        <div style="font-size:13px; font-weight:500; color:var(--batu);">Canggu, Bali</div>
+      </div>
+      <div>
+        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Response Time</div>
+        <div style="font-size:13px; font-weight:500; color:var(--batu);">&lt; 2 Hours</div>
+      </div>
+      <div>
+        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Languages</div>
+        <div style="font-size:13px; font-weight:500; color:var(--batu);">EN · ID · ZH</div>
+      </div>
+      <div>
+        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Site Visits</div>
+        <div style="font-size:13px; font-weight:500; color:var(--batu);">By Appointment</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer style="background: var(--kabut); padding: 64px 0 36px;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid md:grid-cols-4 gap-12 mb-14">
+      <div class="md:col-span-2">
+        <img src="brand assets/2.png" alt="Akura Villas" style="height: 36px; width: auto; margin-bottom: 20px;">
+        <p style="font-size:13px; color:rgba(238,237,235,0.45); line-height:1.8; max-width:280px; margin-bottom:24px;">Premium real estate development rooted in Bali's natural landscapes and timeless architecture.</p>
+        <div style="display:flex; gap:10px;">
+          <a href="#" aria-label="Instagram" style="width:36px; height:36px; border-radius:50%; border:1px solid rgba(238,237,235,0.12); display:flex; align-items:center; justify-content:center; color:rgba(238,237,235,0.4); transition: border-color 0.2s ease, color 0.2s ease;" onmouseover="this.style.borderColor='rgba(238,237,235,0.4)';this.style.color='var(--padi)'" onmouseout="this.style.borderColor='rgba(238,237,235,0.12)';this.style.color='rgba(238,237,235,0.4)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn" style="width:36px; height:36px; border-radius:50%; border:1px solid rgba(238,237,235,0.12); display:flex; align-items:center; justify-content:center; color:rgba(238,237,235,0.4); transition: border-color 0.2s ease, color 0.2s ease;" onmouseover="this.style.borderColor='rgba(238,237,235,0.4)';this.style.color='var(--padi)'" onmouseout="this.style.borderColor='rgba(238,237,235,0.12)';this.style.color='rgba(238,237,235,0.4)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:rgba(238,237,235,0.25); margin-bottom:20px;">Navigation</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <a href="#portfolio" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Portfolio</a>
+          <a href="#ongoing" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Ongoing Projects</a>
+          <a href="#philosophy" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Philosophy</a>
+          <a href="#contact" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Contact</a>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:rgba(238,237,235,0.25); margin-bottom:20px;">Contact</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <a href="https://wa.me/62XXXXXXXXXX" style="font-size:13px; color:rgba(238,237,235,0.55); display:flex; align-items:center; gap:8px; transition:color 0.2s ease;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="mailto:hello@akuravillas.com" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">hello@akuravillas.com</a>
+          <span style="font-size:13px; color:rgba(238,237,235,0.4);">Canggu, Badung, Bali 80361</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding-top:24px; border-top:1px solid rgba(238,237,235,0.07); display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px;">
+      <span style="font-size:11px; color:rgba(238,237,235,0.2);">© 2025 Akura Villas. All rights reserved.</span>
+      <div style="display:flex; gap:24px;">
+        <a href="#" style="font-size:11px; color:rgba(238,237,235,0.2); transition:color 0.2s ease;" onmouseover="this.style.color='rgba(238,237,235,0.4)'" onmouseout="this.style.color='rgba(238,237,235,0.2)'">Privacy Policy</a>
+        <a href="#" style="font-size:11px; color:rgba(238,237,235,0.2); transition:color 0.2s ease;" onmouseover="this.style.color='rgba(238,237,235,0.4)'" onmouseout="this.style.color='rgba(238,237,235,0.2)'">Terms of Use</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════
+     FLOATING WHATSAPP BUTTON
+══════════════════════════════════════════ -->
+<a href="https://wa.me/62XXXXXXXXXX?text=Hello%20Akura%20Villas%2C%20I%27m%20interested%20in%20your%20properties."
+   class="wa-float"
+   target="_blank" rel="noopener noreferrer"
+   aria-label="Chat with Akura Villas on WhatsApp"
+   style="
+     position: fixed; bottom: 24px; right: 24px; z-index: 50;
+     display: flex; align-items: center; gap: 10px;
+     padding: 13px 20px 13px 16px;
+     background: #25D366; color: #fff;
+     border-radius: 9999px;
+     box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 8px 40px rgba(37,211,102,0.18), 0 1px 4px rgba(0,0,0,0.12);
+     font-family: 'DM Sans', sans-serif;
+     font-size: 13px; font-weight: 500;
+     text-decoration: none;
+   ">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Chat with us
+</a>
+
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  const logoLight = document.getElementById('logo-light');
+  const logoDark = document.getElementById('logo-dark');
+  const navCta = document.getElementById('nav-cta');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+      logoLight.classList.add('hidden');
+      logoDark.classList.remove('hidden');
+      navCta.classList.remove('btn-ghost-light');
+      navCta.classList.add('btn-dark');
+    } else {
+      nav.classList.remove('scrolled');
+      logoLight.classList.remove('hidden');
+      logoDark.classList.add('hidden');
+      navCta.classList.add('btn-ghost-light');
+      navCta.classList.remove('btn-dark');
+    }
+  }, { passive: true });
+
+  // Mobile menu
+  const mobBtn = document.getElementById('mob-btn');
+  const mobMenu = document.getElementById('mob-menu');
+  const h1 = document.getElementById('h1');
+  const h2 = document.getElementById('h2');
+  const h3 = document.getElementById('h3');
+  let open = false;
+
+  mobBtn.addEventListener('click', () => {
+    open = !open;
+    mobMenu.classList.toggle('hidden', !open);
+    h1.style.transform = open ? 'rotate(45deg) translate(5px, 5px)' : '';
+    h2.style.opacity = open ? '0' : '';
+    h3.style.transform = open ? 'rotate(-45deg) translate(5px, -5px)' : '';
+  });
+
+  mobMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      open = false;
+      mobMenu.classList.add('hidden');
+      h1.style.transform = h3.style.transform = '';
+      h2.style.opacity = '';
+    });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  // Progress bars — animate when visible
+  const bars = document.querySelectorAll('.progress-fill');
+  const barObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const w = e.target.dataset.width;
+        setTimeout(() => { e.target.style.width = w + '%'; }, 200);
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  bars.forEach(b => barObs.observe(b));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
