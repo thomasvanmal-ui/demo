@@ -8,6 +8,24 @@
   --kayu:   #76655C;
   --padi:   #EEEDEB;
   --kabut:  #4A4741;
+
+  /* shadcn/ui compatibility – mapped to brand colours */
+  --background: 42 13% 93%;       /* padi */
+  --foreground: 36 7% 27%;        /* kabut */
+  --muted: 42 10% 87%;
+  --muted-foreground: 42 7% 45%;
+  --accent: 82 21% 55%;           /* padang */
+  --accent-foreground: 90 10% 23%;/* batu */
+  --primary: 90 10% 23%;          /* batu */
+  --primary-foreground: 42 13% 93%;
+  --secondary: 82 15% 88%;
+  --secondary-foreground: 90 10% 23%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 42 8% 82%;
+  --input: 42 8% 82%;
+  --ring: 82 21% 55%;
+  --radius: 0.5rem;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

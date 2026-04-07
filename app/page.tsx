@@ -1,5 +1,4 @@
-import Nav from "@/components/Nav";
-import Hero from "@/components/Hero";
+import { HeroSection } from "@/components/blocks/hero-section-5";
 import Features from "@/components/Features";
 import SocialProof from "@/components/SocialProof";
 import CTASection from "@/components/CTASection";
@@ -11,9 +10,8 @@ export default function Home() {
   return (
     <>
       <RevealInit />
-      <Nav />
+      <HeroSection />
       <main>
-        <Hero />
         <Features />
         <SocialProof />
         <CTASection />
