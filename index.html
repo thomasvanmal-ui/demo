@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Akura Villas — Luxury Real Estate Development in Bali</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akura Villas — Luxury Villa Investment in Bali & Lombok</title>
+
+  <!-- Tailwind config (must precede CDN) -->
   <script>
+    window.tailwind = window.tailwind || {};
     tailwind.config = {
       theme: {
         extend: {
@@ -20,13 +22,22 @@
             display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
             body:    ['"DM Sans"', 'system-ui', 'sans-serif'],
           },
-        }
-      }
-    }
+        },
+      },
+    };
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- React 18 + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <style>
     :root {
       --batu:   #3A4034;
@@ -36,48 +47,117 @@
       --kabut:  #4A4741;
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-family: 'DM Sans', system-ui, sans-serif; }
+    body { background: var(--padi); color: var(--kabut); }
 
-    /* Grain overlay */
+    /* Subtle grain */
     body::after {
       content: '';
       position: fixed;
       inset: -50%;
-      width: 200%;
-      height: 200%;
+      width: 200%; height: 200%;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 9999;
-      opacity: 0.35;
+      opacity: 0.3;
     }
 
-    /* Reveal on scroll */
+    /* ── Scroll reveal ── */
     .reveal {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(22px);
+      transition:
+        opacity  0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.45s; }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
 
-    /* Nav */
-    #nav { transition: background-color 0.3s ease, box-shadow 0.3s ease; }
-    #nav.scrolled {
-      background-color: var(--padi);
-      box-shadow: 0 1px 0 rgba(58,64,52,0.08), 0 4px 24px rgba(58,64,52,0.05);
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.25s ease;
     }
+    .btn:active  { transform: scale(0.97) !important; }
+    .btn:focus-visible { outline: 2px solid var(--padang); outline-offset: 3px; }
+
+    .btn-dark {
+      background: var(--batu);
+      color: var(--padi);
+      border: 1.5px solid var(--batu);
+    }
+    .btn-dark:hover { background: transparent; color: var(--batu); }
+
+    .btn-ghost-light {
+      background: transparent;
+      color: var(--padi);
+      border: 1.5px solid rgba(238,237,235,0.32);
+    }
+    .btn-ghost-light:hover {
+      background: rgba(238,237,235,0.08);
+      border-color: rgba(238,237,235,0.6);
+    }
+
+    .btn-ghost-dark {
+      background: transparent;
+      color: var(--batu);
+      border: 1.5px solid rgba(58,64,52,0.22);
+    }
+    .btn-ghost-dark:hover {
+      background: rgba(58,64,52,0.06);
+      border-color: rgba(58,64,52,0.45);
+    }
+
+    .btn-wa {
+      background: #25D366;
+      color: #fff;
+      border: 1.5px solid #25D366;
+      box-shadow: 0 4px 18px rgba(37,211,102,0.28);
+    }
+    .btn-wa:hover {
+      background: #1ebe5d;
+      box-shadow: 0 6px 26px rgba(37,211,102,0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ── Feature card ── */
+    .feature-card {
+      transition:
+        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.35s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 64px rgba(58,64,52,0.1) !important;
+    }
+
+    /* ── Logo items ── */
+    .logo-item {
+      opacity: 0.38;
+      transition: opacity 0.3s ease;
+    }
+    .logo-item:hover { opacity: 0.72; }
+
+    /* ── Nav link underline ── */
     .nav-link {
       position: relative;
-      color: var(--padi);
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      opacity: 0.75;
+      text-decoration: none;
       transition: opacity 0.2s ease;
     }
     .nav-link::after {
@@ -88,754 +168,1099 @@
       background: currentColor;
       transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .nav-link:hover { opacity: 1; }
     .nav-link:hover::after { width: 100%; }
-    #nav.scrolled .nav-link { color: var(--batu); }
 
-    /* Buttons */
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 13px 28px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px; font-weight: 500;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
-                  transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 0.25s ease;
+    /* ── WhatsApp FAB ── */
+    .wa-fab {
+      transition:
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s ease;
     }
-    .btn:focus-visible { outline: 2px solid var(--padang); outline-offset: 3px; }
-    .btn:active { transform: scale(0.97) !important; }
+    .wa-fab:hover { transform: scale(1.08) translateY(-2px); }
+    .wa-fab:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
-    .btn-dark {
-      background: var(--batu); color: var(--padi);
-      border: 1.5px solid var(--batu);
-    }
-    .btn-dark:hover { background: transparent; color: var(--batu); }
-
-    .btn-ghost-light {
-      background: transparent; color: var(--padi);
-      border: 1.5px solid rgba(238,237,235,0.35);
-    }
-    .btn-ghost-light:hover {
-      background: rgba(238,237,235,0.08);
-      border-color: rgba(238,237,235,0.6);
-    }
-
-    .btn-wa {
-      background: #25D366; color: #fff;
-      border: 1.5px solid #25D366;
-      box-shadow: 0 4px 16px rgba(37,211,102,0.3);
-    }
-    .btn-wa:hover {
-      background: #1ebe5d;
-      box-shadow: 0 6px 24px rgba(37,211,102,0.4);
-      transform: translateY(-1px);
-    }
-
-    /* Project card */
-    .project-card { overflow: hidden; border-radius: 3px; }
-    .project-card .thumb { overflow: hidden; }
-    .project-card .thumb img {
-      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .project-card:hover .thumb img,
-    .project-card:focus-within .thumb img { transform: scale(1.05); }
-    .project-card:focus-visible { outline: 2px solid var(--padang); outline-offset: 3px; }
-
-    /* Progress */
-    .progress-fill {
-      height: 100%;
-      border-radius: 9999px;
-      transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Tag */
-    .tag {
-      display: inline-block;
-      padding: 3px 9px;
-      font-size: 10px; font-weight: 500;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      border-radius: 2px;
-    }
-
-    /* WhatsApp float */
-    .wa-float {
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 0.3s ease;
-    }
-    .wa-float:hover { transform: scale(1.06) translateY(-2px); }
-    .wa-float:active { transform: scale(0.96); }
-    .wa-float:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-
-    /* Divider lines */
-    .eyebrow { display: flex; align-items: center; gap: 12px; }
-    .eyebrow-line { width: 28px; height: 1px; background: var(--padang); flex-shrink: 0; }
-    .eyebrow-text {
-      font-size: 10px; font-weight: 500;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--padang);
-    }
-
-    /* USP grid separator */
-    @media (min-width: 768px) {
-      .usp-grid > * + * { border-left: 1px solid rgba(238,237,235,0.08); }
-    }
-
+    /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 3px; }
     ::-webkit-scrollbar-track { background: var(--padi); }
     ::-webkit-scrollbar-thumb { background: var(--padang); border-radius: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .btn, .feature-card, .wa-fab { transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
   </style>
 </head>
-<body class="bg-padi" style="color: var(--kabut);">
+<body>
+  <div id="root"></div>
 
-<!-- ══════════════════════════════════════════
-     NAV
-══════════════════════════════════════════ -->
-<nav id="nav" class="fixed top-0 left-0 right-0 z-50">
-  <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-[72px]">
-    <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-padang rounded-sm">
-      <img src="brand assets/2.png" alt="Akura Villas" id="logo-light" class="h-9 w-auto">
-      <img src="brand assets/1.png" alt="Akura Villas" id="logo-dark" class="h-9 w-auto hidden">
-    </a>
+  <script type="text/babel">
+    const { useState, useEffect, useCallback } = React;
 
-    <div class="hidden md:flex items-center gap-10">
-      <a href="#portfolio" class="nav-link">Portfolio</a>
-      <a href="#ongoing" class="nav-link">Ongoing</a>
-      <a href="#philosophy" class="nav-link">Philosophy</a>
-      <a href="#contact" class="btn btn-ghost-light" style="padding: 9px 20px; font-size: 11px;" id="nav-cta">
-        Enquire
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-      </a>
-    </div>
+    const WA_LINK = "https://wa.me/6281234567890?text=Hello!%20I%20am%20interested%20in%20learning%20more%20about%20Akura%20Villas.";
 
-    <button id="mob-btn" class="md:hidden p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-padang" aria-label="Toggle menu">
-      <span class="block w-5 h-px mb-1.5" style="background:var(--padi); transition: transform 0.25s ease;" id="h1"></span>
-      <span class="block w-5 h-px mb-1.5" style="background:var(--padi); transition: opacity 0.25s ease;" id="h2"></span>
-      <span class="block w-5 h-px" style="background:var(--padi); transition: transform 0.25s ease;" id="h3"></span>
-    </button>
-  </div>
-
-  <div id="mob-menu" class="md:hidden hidden px-6 pb-6 pt-2 flex flex-col gap-5" style="background: var(--padi);">
-    <a href="#portfolio" class="font-body text-sm font-medium" style="color: var(--batu);">Portfolio</a>
-    <a href="#ongoing" class="font-body text-sm font-medium" style="color: var(--batu);">Ongoing</a>
-    <a href="#philosophy" class="font-body text-sm font-medium" style="color: var(--batu);">Philosophy</a>
-    <a href="#contact" class="btn btn-dark self-start">Enquire</a>
-  </div>
-</nav>
-
-
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
-<section class="relative min-h-screen flex flex-col justify-end overflow-hidden" style="background: var(--batu);">
-  <!-- BG image -->
-  <div class="absolute inset-0 z-0">
-    <img src="https://placehold.co/1920x1080/3A4034/4A4741?text=." alt="" aria-hidden="true" class="w-full h-full object-cover" style="opacity:0.45;">
-    <!-- Layered gradients -->
-    <div class="absolute inset-0" style="background:
-      radial-gradient(ellipse at 25% 35%, rgba(147,162,117,0.18) 0%, transparent 55%),
-      radial-gradient(ellipse at 75% 75%, rgba(118,101,92,0.22) 0%, transparent 50%),
-      linear-gradient(180deg, rgba(58,64,52,0.05) 0%, rgba(58,64,52,0.5) 55%, rgba(58,64,52,0.97) 100%);"></div>
-  </div>
-
-  <!-- Content -->
-  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 pb-0 w-full">
-    <div class="pb-20 lg:pb-28">
-      <div class="eyebrow reveal mb-7">
-        <div class="eyebrow-line"></div>
-        <span class="eyebrow-text">Luxury Real Estate · Bali, Indonesia</span>
-      </div>
-
-      <h1 class="font-display font-light reveal delay-1" style="font-size: clamp(54px, 9vw, 118px); letter-spacing: -0.03em; color: var(--padi); line-height: 0.92; margin-bottom: 28px;">
-        Where Land<br>
-        <em style="font-style:italic; color: var(--padang);">Becomes</em><br>
-        Legacy
-      </h1>
-
-      <p class="font-body font-light reveal delay-2" style="font-size: 17px; color: rgba(238,237,235,0.68); line-height: 1.75; max-width: 420px; margin-bottom: 44px;">
-        Akura Villas crafts premium residential developments across Bali's most coveted landscapes — rooted in nature, built to endure.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-4 reveal delay-3">
-        <a href="https://wa.me/62XXXXXXXXXX?text=Hello%2C%20I%27m%20interested%20in%20Akura%20Villas" class="btn btn-wa" target="_blank" rel="noopener">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Chat on WhatsApp
-        </a>
-        <a href="#portfolio" class="btn btn-ghost-light">
-          View Portfolio
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Stats strip -->
-  <div class="relative z-10 w-full border-t" style="background: rgba(58,64,52,0.55); backdrop-filter: blur(16px); border-color: rgba(238,237,235,0.08);">
-    <div class="max-w-7xl mx-auto px-6 lg:px-12 py-7 grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div class="reveal">
-        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">12+</div>
-        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">Completed Villas</div>
-      </div>
-      <div class="reveal delay-1">
-        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">4</div>
-        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">Active Developments</div>
-      </div>
-      <div class="reveal delay-2">
-        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">8yr</div>
-        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">In Bali Market</div>
-      </div>
-      <div class="reveal delay-3">
-        <div class="font-display font-light" style="font-size: 38px; color: var(--padang); letter-spacing: -0.02em; line-height: 1;">18%</div>
-        <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.45); margin-top: 4px;">Avg. Investor ROI</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     PHILOSOPHY
-══════════════════════════════════════════ -->
-<section id="philosophy" style="background: var(--padi); padding: 100px 0 112px;">
-  <div class="max-w-7xl mx-auto px-6 lg:px-12">
-    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-      <div>
-        <div class="eyebrow reveal mb-5">
-          <div class="eyebrow-line"></div>
-          <span class="eyebrow-text">Our Philosophy</span>
-        </div>
-        <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--batu); line-height: 1.02; margin-bottom: 24px;">
-          Rooted in Bali.<br>
-          <em style="font-style:italic;">Built with intention.</em>
-        </h2>
-        <p class="font-body font-light reveal delay-2" style="font-size: 15px; color: var(--kabut); line-height: 1.8; margin-bottom: 18px;">
-          The finest homes don't announce themselves — they settle quietly into the landscape, as if they were always meant to be there. Every Akura villa begins with the land, its contours, its light, its shadow.
-        </p>
-        <p class="font-body font-light reveal delay-3" style="font-size: 15px; color: var(--kabut); line-height: 1.8; margin-bottom: 44px;">
-          From the rice fields of Canggu to the cliffs of Uluwatu, we build with minimal footprint and maximum soul — honouring Bali's natural heritage while creating homes built to last generations.
-        </p>
-        <div class="grid grid-cols-2 gap-8 pt-8 reveal delay-4" style="border-top: 1px solid rgba(58,64,52,0.1);">
-          <div>
-            <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 6px;">Sustainability</div>
-            <div style="font-size: 13px; color: var(--kabut); line-height: 1.65;">Local materials, passive cooling, minimal land intervention</div>
-          </div>
-          <div>
-            <div style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 6px;">Community</div>
-            <div style="font-size: 13px; color: var(--kabut); line-height: 1.65;">Every project contributes to the local Balinese ecosystem</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4 reveal delay-1">
-        <div style="border-radius: 3px; overflow: hidden; aspect-ratio: 4/5;">
-          <img src="https://placehold.co/400x500/76655C/EEEDEB?text=." alt="Bali landscape" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        </div>
-        <div style="border-radius: 3px; overflow: hidden; aspect-ratio: 4/5; margin-top: 32px;">
-          <img src="https://placehold.co/400x500/3A4034/93A275?text=." alt="Villa interior" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     COMPLETED PORTFOLIO
-══════════════════════════════════════════ -->
-<section id="portfolio" style="background: var(--kabut); padding: 100px 0 112px;">
-  <div class="max-w-7xl mx-auto px-6 lg:px-12">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
-      <div>
-        <div class="eyebrow reveal mb-5">
-          <div class="eyebrow-line"></div>
-          <span class="eyebrow-text">Completed Projects</span>
-        </div>
-        <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--padi); line-height: 1.02;">
-          The Akura<br>Portfolio
-        </h2>
-      </div>
-      <p class="font-body font-light reveal delay-2" style="font-size: 14px; color: rgba(238,237,235,0.5); line-height: 1.75; max-width: 300px;">
-        Twelve delivered projects across Bali's most desirable locations — each one a testament to craft and considered design.
-      </p>
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-      <!-- Card 1 -->
-      <div class="project-card reveal" style="background: rgba(58,64,52,0.5);" tabindex="0">
-        <div class="thumb aspect-[4/3]">
-          <img src="https://placehold.co/800x600/3A4034/93A275?text=." alt="Villa Karang Sepi" class="w-full h-full object-cover">
-        </div>
-        <div style="padding: 24px;">
-          <span class="tag" style="background: rgba(147,162,117,0.15); color: var(--padang); margin-bottom: 10px;">Villa · 3 Bed</span>
-          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Villa Karang Sepi</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Uluwatu · Completed 2023</p>
-          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Cliff-edge villa with infinity pool overlooking the Indian Ocean. Built from local limestone and reclaimed timber.</p>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="project-card reveal delay-1" style="background: rgba(58,64,52,0.5);" tabindex="0">
-        <div class="thumb aspect-[4/3]">
-          <img src="https://placehold.co/800x600/76655C/EEEDEB?text=." alt="Padi House" class="w-full h-full object-cover">
-        </div>
-        <div style="padding: 24px;">
-          <span class="tag" style="background: rgba(118,101,92,0.25); color: #c9b8b0; margin-bottom: 10px;">Compound · 5 Bed</span>
-          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Padi House</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Canggu · Completed 2022</p>
-          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Five-bedroom compound set amid working rice fields. A contemporary take on traditional Balinese compound living.</p>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="project-card reveal delay-2" style="background: rgba(58,64,52,0.5);" tabindex="0">
-        <div class="thumb aspect-[4/3]">
-          <img src="https://placehold.co/800x600/93A275/3A4034?text=." alt="Hutan Villa" class="w-full h-full object-cover">
-        </div>
-        <div style="padding: 24px;">
-          <span class="tag" style="background: rgba(147,162,117,0.15); color: var(--padang); margin-bottom: 10px;">Villa · 2 Bed</span>
-          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Hutan Villa</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Ubud · Completed 2023</p>
-          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Forest-immersed retreat above the Ayung River Valley. Passive cooling architecture, zero imported materials.</p>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="project-card reveal" style="background: rgba(58,64,52,0.5);" tabindex="0">
-        <div class="thumb aspect-[4/3]">
-          <img src="https://placehold.co/800x600/4A4741/EEEDEB?text=." alt="Seminyak Residence" class="w-full h-full object-cover">
-        </div>
-        <div style="padding: 24px;">
-          <span class="tag" style="background: rgba(74,71,65,0.4); color: rgba(238,237,235,0.5); margin-bottom: 10px;">Residence · 4 Bed</span>
-          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Seminyak Residence</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Seminyak · Completed 2021</p>
-          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Boutique urban villa designed for investment. Consistently achieves 85%+ occupancy via short-term rental.</p>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="project-card reveal delay-1" style="background: rgba(58,64,52,0.5);" tabindex="0">
-        <div class="thumb aspect-[4/3]">
-          <img src="https://placehold.co/800x600/3A4034/76655C?text=." alt="Bukit Serenity" class="w-full h-full object-cover">
-        </div>
-        <div style="padding: 24px;">
-          <span class="tag" style="background: rgba(147,162,117,0.15); color: var(--padang); margin-bottom: 10px;">Villa · 6 Bed</span>
-          <h3 class="font-display font-medium" style="font-size: 26px; color: var(--padi); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;">Bukit Serenity</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,237,235,0.38); margin-bottom: 10px;">Bukit Peninsula · Completed 2024</p>
-          <p style="font-size: 13px; color: rgba(238,237,235,0.55); line-height: 1.65;">Grand hilltop estate with 270° ocean views. Six en-suites, private cinema, and a 25-metre lap pool.</p>
-        </div>
-      </div>
-
-      <!-- View all CTA tile -->
-      <div class="reveal delay-2 flex flex-col items-center justify-center p-10 border cursor-pointer" style="border-color: rgba(238,237,235,0.1); border-radius: 3px; min-height: 220px; transition: background 0.3s ease;" onmouseover="this.style.background='rgba(147,162,117,0.07)'" onmouseout="this.style.background='transparent'" tabindex="0" role="button">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(147,162,117,0.12); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-        </div>
-        <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang);">View All 12 Projects</span>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     ONGOING PROJECTS
-══════════════════════════════════════════ -->
-<section id="ongoing" style="background: var(--padi); padding: 100px 0 112px;">
-  <div class="max-w-7xl mx-auto px-6 lg:px-12">
-    <div class="mb-14">
-      <div class="eyebrow reveal mb-5">
-        <div class="eyebrow-line"></div>
-        <span class="eyebrow-text">Ongoing Developments</span>
-      </div>
-      <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--batu); line-height: 1.02;">
-        Currently<br>Under Development
-      </h2>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-7">
-
-      <!-- Ongoing 1 -->
-      <div class="reveal overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
-        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
-          <img src="https://placehold.co/800x450/3A4034/93A275?text=." alt="Sayan Heights" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--padang); color: var(--batu);">In Construction</span>
-        </div>
-        <div style="padding: 32px;">
-          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Sayan Heights</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Ubud · Est. Completion Q4 2025</p>
-          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Eight-villa estate perched above the Sayan Ridge. Each villa frames a unique perspective of the jungle canopy and Ayung valley below.</p>
-          <div style="margin-bottom: 24px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
-              <span style="font-size: 11px; font-weight:600; color:var(--batu);">72%</span>
-            </div>
-            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
-              <div class="progress-fill" data-width="72" style="width:0%; background: linear-gradient(to right, var(--padang), var(--batu));"></div>
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">8</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Villas</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">2–4</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ongoing 2 -->
-      <div class="reveal delay-1 overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
-        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
-          <img src="https://placehold.co/800x450/76655C/EEEDEB?text=." alt="Cliff House Bingin" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--kayu); color: var(--padi);">Pre-Launch</span>
-        </div>
-        <div style="padding: 32px;">
-          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Cliff House Bingin</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Bingin · Est. Completion Q2 2026</p>
-          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Four ultra-private cliff-side residences cantilevered over Bingin Beach. A rare opportunity in one of Bali's most exclusive surf locations.</p>
-          <div style="margin-bottom: 24px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
-              <span style="font-size: 11px; font-weight:600; color:var(--batu);">28%</span>
-            </div>
-            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
-              <div class="progress-fill" data-width="28" style="width:0%; background: linear-gradient(to right, var(--kayu), var(--batu));"></div>
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">4</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Residences</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">4–5</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">4</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ongoing 3 -->
-      <div class="reveal overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
-        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
-          <img src="https://placehold.co/800x450/93A275/3A4034?text=." alt="Pererenan Eco Estate" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--padang); color: var(--batu);">In Construction</span>
-        </div>
-        <div style="padding: 32px;">
-          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Pererenan Eco Estate</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Pererenan · Est. Completion Q1 2026</p>
-          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Six eco-certified villas with solar systems and rainwater harvesting. LEED-aligned construction, zero single-use plastics on site.</p>
-          <div style="margin-bottom: 24px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
-              <span style="font-size: 11px; font-weight:600; color:var(--batu);">55%</span>
-            </div>
-            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
-              <div class="progress-fill" data-width="55" style="width:0%; background: linear-gradient(to right, var(--padang), var(--batu));"></div>
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">6</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Villas</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">2</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ongoing 4 -->
-      <div class="reveal delay-1 overflow-hidden" style="border-radius: 3px; background: #fff; box-shadow: 0 2px 8px rgba(58,64,52,0.05), 0 12px 40px rgba(58,64,52,0.08);">
-        <div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
-          <img src="https://placehold.co/800x450/4A4741/93A275?text=." alt="Nyanyi Beachfront" class="w-full h-full object-cover" style="transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-          <span class="tag" style="position:absolute; top:14px; left:14px; background: var(--kabut); color: var(--padi);">Planning</span>
-        </div>
-        <div style="padding: 32px;">
-          <h3 class="font-display font-medium" style="font-size: 32px; color: var(--batu); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 4px;">Nyanyi Beachfront</h3>
-          <p style="font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--padang); margin-bottom: 16px;">Nyanyi · Est. Completion Q3 2026</p>
-          <p style="font-size: 14px; color: var(--kabut); line-height: 1.75; margin-bottom: 24px;">Three beachfront villas on one of Bali's last undeveloped black-sand beaches. Architectural concept by award-winning Balinese studio.</p>
-          <div style="margin-bottom: 24px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-              <span style="font-size: 10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--kabut);">Construction Progress</span>
-              <span style="font-size: 11px; font-weight:600; color:var(--batu);">12%</span>
-            </div>
-            <div style="height: 3px; border-radius: 9999px; background: rgba(58,64,52,0.1); overflow: hidden;">
-              <div class="progress-fill" data-width="12" style="width:0%; background: linear-gradient(to right, var(--kabut), var(--batu));"></div>
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-4 pt-5" style="border-top: 1px solid rgba(58,64,52,0.07);">
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Villas</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">5</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Bedrooms</div></div>
-            <div><div class="font-display font-medium" style="font-size:28px; color:var(--batu);">3</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(74,71,65,0.45);">Units Left</div></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     WHY AKURA
-══════════════════════════════════════════ -->
-<section style="background: var(--batu); padding: 100px 0 112px;">
-  <div class="max-w-7xl mx-auto px-6 lg:px-12">
-    <div class="mb-14">
-      <div class="eyebrow reveal mb-5">
-        <div class="eyebrow-line"></div>
-        <span class="eyebrow-text">Why Akura</span>
-      </div>
-      <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(38px, 5vw, 64px); letter-spacing: -0.03em; color: var(--padi); line-height: 1.02; max-width: 560px;">
-        The difference is in the details no one sees
-      </h2>
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 usp-grid" style="border: 1px solid rgba(238,237,235,0.06); border-radius: 3px; overflow: hidden;">
-
-      <div class="reveal p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
-        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
-        </div>
-        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">Freehold Land</h3>
-        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">Every project is structured with verified freehold titles and PT PMA-compatible ownership for foreign investors.</p>
-      </div>
-
-      <div class="reveal delay-1 p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
-        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
-        </div>
-        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">On Time</h3>
-        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">100% on-time delivery record across all 12 completed projects. We commit to timelines and hold ourselves accountable.</p>
-      </div>
-
-      <div class="reveal delay-2 p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
-        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-        </div>
-        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">Strong Returns</h3>
-        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">Investors across our portfolio average 18% annual ROI, backed by Bali's growing short-term rental demand.</p>
-      </div>
-
-      <div class="reveal delay-3 p-8 lg:p-10" style="background: rgba(255,255,255,0.02);">
-        <div style="width:42px; height:42px; border-radius:50%; background:rgba(147,162,117,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--padang)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3 class="font-display font-medium" style="font-size:24px; color:var(--padi); letter-spacing:-0.02em; margin-bottom:12px;">Fully Managed</h3>
-        <p style="font-size:13px; color:rgba(238,237,235,0.5); line-height:1.75;">End-to-end management through Akura's hospitality arm — rental, maintenance, and ownership paperwork handled.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     CTA
-══════════════════════════════════════════ -->
-<section id="contact" class="relative overflow-hidden" style="background: var(--padi); padding: 100px 0 112px;">
-  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 70% 40%, rgba(147,162,117,0.13) 0%, transparent 55%), radial-gradient(ellipse at 15% 80%, rgba(118,101,92,0.09) 0%, transparent 50%);"></div>
-
-  <div class="relative max-w-3xl mx-auto px-6 lg:px-12 text-center">
-    <div class="eyebrow reveal justify-center mb-6">
-      <div class="eyebrow-line"></div>
-      <span class="eyebrow-text">Start a Conversation</span>
-      <div class="eyebrow-line"></div>
-    </div>
-
-    <h2 class="font-display font-light reveal delay-1" style="font-size: clamp(44px, 7vw, 88px); letter-spacing: -0.03em; color: var(--batu); line-height: 0.92; margin-bottom: 24px;">
-      Your Bali villa<br>
-      <em style="font-style:italic; color: var(--padang);">starts here.</em>
-    </h2>
-
-    <p class="font-body font-light reveal delay-2" style="font-size: 16px; color: var(--kabut); line-height: 1.8; max-width: 460px; margin: 0 auto 48px;">
-      Whether you're investing, building a home, or exploring options — the fastest way to reach us is WhatsApp. We're in Bali and respond within hours.
-    </p>
-
-    <div class="reveal delay-3 flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="https://wa.me/62XXXXXXXXXX?text=Hello%20Akura%20Villas%2C%20I%27m%20interested%20in%20learning%20more." class="btn btn-wa" target="_blank" rel="noopener">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Message on WhatsApp
-      </a>
-      <a href="mailto:hello@akuravillas.com" class="btn btn-dark">Send an Email</a>
-    </div>
-
-    <div class="reveal delay-4 grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-12" style="border-top: 1px solid rgba(58,64,52,0.1);">
-      <div>
-        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Bali Office</div>
-        <div style="font-size:13px; font-weight:500; color:var(--batu);">Canggu, Bali</div>
-      </div>
-      <div>
-        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Response Time</div>
-        <div style="font-size:13px; font-weight:500; color:var(--batu);">&lt; 2 Hours</div>
-      </div>
-      <div>
-        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Languages</div>
-        <div style="font-size:13px; font-weight:500; color:var(--batu);">EN · ID · ZH</div>
-      </div>
-      <div>
-        <div style="font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(74,71,65,0.4); margin-bottom:4px;">Site Visits</div>
-        <div style="font-size:13px; font-weight:500; color:var(--batu);">By Appointment</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
-<footer style="background: var(--kabut); padding: 64px 0 36px;">
-  <div class="max-w-7xl mx-auto px-6 lg:px-12">
-    <div class="grid md:grid-cols-4 gap-12 mb-14">
-      <div class="md:col-span-2">
-        <img src="brand assets/2.png" alt="Akura Villas" style="height: 36px; width: auto; margin-bottom: 20px;">
-        <p style="font-size:13px; color:rgba(238,237,235,0.45); line-height:1.8; max-width:280px; margin-bottom:24px;">Premium real estate development rooted in Bali's natural landscapes and timeless architecture.</p>
-        <div style="display:flex; gap:10px;">
-          <a href="#" aria-label="Instagram" style="width:36px; height:36px; border-radius:50%; border:1px solid rgba(238,237,235,0.12); display:flex; align-items:center; justify-content:center; color:rgba(238,237,235,0.4); transition: border-color 0.2s ease, color 0.2s ease;" onmouseover="this.style.borderColor='rgba(238,237,235,0.4)';this.style.color='var(--padi)'" onmouseout="this.style.borderColor='rgba(238,237,235,0.12)';this.style.color='rgba(238,237,235,0.4)'">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="#" aria-label="LinkedIn" style="width:36px; height:36px; border-radius:50%; border:1px solid rgba(238,237,235,0.12); display:flex; align-items:center; justify-content:center; color:rgba(238,237,235,0.4); transition: border-color 0.2s ease, color 0.2s ease;" onmouseover="this.style.borderColor='rgba(238,237,235,0.4)';this.style.color='var(--padi)'" onmouseout="this.style.borderColor='rgba(238,237,235,0.12)';this.style.color='rgba(238,237,235,0.4)'">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div>
-        <div style="font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:rgba(238,237,235,0.25); margin-bottom:20px;">Navigation</div>
-        <div style="display:flex; flex-direction:column; gap:12px;">
-          <a href="#portfolio" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Portfolio</a>
-          <a href="#ongoing" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Ongoing Projects</a>
-          <a href="#philosophy" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Philosophy</a>
-          <a href="#contact" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">Contact</a>
-        </div>
-      </div>
-
-      <div>
-        <div style="font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:rgba(238,237,235,0.25); margin-bottom:20px;">Contact</div>
-        <div style="display:flex; flex-direction:column; gap:12px;">
-          <a href="https://wa.me/62XXXXXXXXXX" style="font-size:13px; color:rgba(238,237,235,0.55); display:flex; align-items:center; gap:8px; transition:color 0.2s ease;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            WhatsApp
-          </a>
-          <a href="mailto:hello@akuravillas.com" style="font-size:13px; color:rgba(238,237,235,0.55); transition:color 0.2s ease;" onmouseover="this.style.color='var(--padi)'" onmouseout="this.style.color='rgba(238,237,235,0.55)'">hello@akuravillas.com</a>
-          <span style="font-size:13px; color:rgba(238,237,235,0.4);">Canggu, Badung, Bali 80361</span>
-        </div>
-      </div>
-    </div>
-
-    <div style="padding-top:24px; border-top:1px solid rgba(238,237,235,0.07); display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px;">
-      <span style="font-size:11px; color:rgba(238,237,235,0.2);">© 2025 Akura Villas. All rights reserved.</span>
-      <div style="display:flex; gap:24px;">
-        <a href="#" style="font-size:11px; color:rgba(238,237,235,0.2); transition:color 0.2s ease;" onmouseover="this.style.color='rgba(238,237,235,0.4)'" onmouseout="this.style.color='rgba(238,237,235,0.2)'">Privacy Policy</a>
-        <a href="#" style="font-size:11px; color:rgba(238,237,235,0.2); transition:color 0.2s ease;" onmouseover="this.style.color='rgba(238,237,235,0.4)'" onmouseout="this.style.color='rgba(238,237,235,0.2)'">Terms of Use</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-<!-- ══════════════════════════════════════════
-     FLOATING WHATSAPP BUTTON
-══════════════════════════════════════════ -->
-<a href="https://wa.me/62XXXXXXXXXX?text=Hello%20Akura%20Villas%2C%20I%27m%20interested%20in%20your%20properties."
-   class="wa-float"
-   target="_blank" rel="noopener noreferrer"
-   aria-label="Chat with Akura Villas on WhatsApp"
-   style="
-     position: fixed; bottom: 24px; right: 24px; z-index: 50;
-     display: flex; align-items: center; gap: 10px;
-     padding: 13px 20px 13px 16px;
-     background: #25D366; color: #fff;
-     border-radius: 9999px;
-     box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 8px 40px rgba(37,211,102,0.18), 0 1px 4px rgba(0,0,0,0.12);
-     font-family: 'DM Sans', sans-serif;
-     font-size: 13px; font-weight: 500;
-     text-decoration: none;
-   ">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  Chat with us
-</a>
-
-
-<!-- ══════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════ -->
-<script>
-  // Nav scroll
-  const nav = document.getElementById('nav');
-  const logoLight = document.getElementById('logo-light');
-  const logoDark = document.getElementById('logo-dark');
-  const navCta = document.getElementById('nav-cta');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 60) {
-      nav.classList.add('scrolled');
-      logoLight.classList.add('hidden');
-      logoDark.classList.remove('hidden');
-      navCta.classList.remove('btn-ghost-light');
-      navCta.classList.add('btn-dark');
-    } else {
-      nav.classList.remove('scrolled');
-      logoLight.classList.remove('hidden');
-      logoDark.classList.add('hidden');
-      navCta.classList.add('btn-ghost-light');
-      navCta.classList.remove('btn-dark');
+    /* ─────────────────────────────────────────────
+       Hook: scroll-reveal via IntersectionObserver
+    ───────────────────────────────────────────── */
+    function useReveal() {
+      useEffect(() => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in-view");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: "0px 0px -48px 0px" }
+        );
+        document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+        return () => observer.disconnect();
+      }, []);
     }
-  }, { passive: true });
 
-  // Mobile menu
-  const mobBtn = document.getElementById('mob-btn');
-  const mobMenu = document.getElementById('mob-menu');
-  const h1 = document.getElementById('h1');
-  const h2 = document.getElementById('h2');
-  const h3 = document.getElementById('h3');
-  let open = false;
+    /* ─────────────────────────────────────────────
+       Inline SVG icons
+    ───────────────────────────────────────────── */
+    const Icon = ({ name, size = 20, ...props }) => {
+      const paths = {
+        whatsapp: (
+          <path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        ),
+        trending: (
+          <>
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <polyline points="16 7 22 7 22 13" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </>
+        ),
+        shield: (
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        ),
+        leaf: (
+          <>
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </>
+        ),
+        eye: (
+          <>
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.75" fill="none"/>
+          </>
+        ),
+        home: (
+          <>
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </>
+        ),
+        users: (
+          <>
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="1.75" fill="none"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </>
+        ),
+        arrowUpRight: (
+          <path d="M7 17L17 7M17 7H7M17 7v10" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        ),
+        arrowDown: (
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        ),
+        instagram: (
+          <>
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="1.75" fill="none"/>
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" stroke="currentColor" strokeWidth="1.75" fill="none"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"/>
+          </>
+        ),
+        linkedin: (
+          <>
+            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <rect x="2" y="9" width="4" height="12" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="4" cy="4" r="2" stroke="currentColor" strokeWidth="1.75" fill="none"/>
+          </>
+        ),
+        mail: (
+          <>
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="1.75" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </>
+        ),
+        check: (
+          <polyline points="20 6 9 17 4 12" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        ),
+      };
 
-  mobBtn.addEventListener('click', () => {
-    open = !open;
-    mobMenu.classList.toggle('hidden', !open);
-    h1.style.transform = open ? 'rotate(45deg) translate(5px, 5px)' : '';
-    h2.style.opacity = open ? '0' : '';
-    h3.style.transform = open ? 'rotate(-45deg) translate(5px, -5px)' : '';
-  });
+      return (
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          {...props}
+        >
+          {paths[name]}
+        </svg>
+      );
+    };
 
-  mobMenu.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      open = false;
-      mobMenu.classList.add('hidden');
-      h1.style.transform = h3.style.transform = '';
-      h2.style.opacity = '';
-    });
-  });
+    /* ─────────────────────────────────────────────
+       Eyebrow label
+    ───────────────────────────────────────────── */
+    function Eyebrow({ children, light = false }) {
+      return (
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div style={{
+            width: "28px", height: "1px",
+            background: "var(--padang)",
+            flexShrink: 0,
+          }} />
+          <span style={{
+            fontSize: "10px",
+            fontWeight: "500",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "var(--padang)",
+          }}>
+            {children}
+          </span>
+        </div>
+      );
+    }
 
-  // Scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  const revealObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        revealObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-  revealEls.forEach(el => revealObs.observe(el));
+    /* ─────────────────────────────────────────────
+       Nav
+    ───────────────────────────────────────────── */
+    function Nav() {
+      const [scrolled, setScrolled] = useState(false);
+      const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Progress bars — animate when visible
-  const bars = document.querySelectorAll('.progress-fill');
-  const barObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const w = e.target.dataset.width;
-        setTimeout(() => { e.target.style.width = w + '%'; }, 200);
-        barObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  bars.forEach(b => barObs.observe(b));
+      useEffect(() => {
+        const handler = () => setScrolled(window.scrollY > 56);
+        window.addEventListener("scroll", handler, { passive: true });
+        return () => window.removeEventListener("scroll", handler);
+      }, []);
 
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const t = document.querySelector(a.getAttribute('href'));
-      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
-    });
-  });
-</script>
+      const linkColor = scrolled ? "var(--batu)" : "rgba(238,237,235,0.72)";
+
+      return (
+        <nav
+          style={{
+            position: "fixed",
+            top: 0, left: 0, right: 0,
+            zIndex: 50,
+            background: scrolled ? "var(--padi)" : "transparent",
+            boxShadow: scrolled ? "0 1px 0 rgba(58,64,52,0.08)" : "none",
+            transition: "background 0.3s ease, box-shadow 0.3s ease",
+          }}
+        >
+          <div style={{
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "0 24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: "72px",
+          }}>
+            {/* Logo */}
+            <a href="#" style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={scrolled ? "brand assets/1.png" : "brand assets/2.png"}
+                alt="Akura Villas"
+                style={{ height: "36px", width: "auto" }}
+              />
+            </a>
+
+            {/* Desktop links */}
+            <div style={{ display: "flex", alignItems: "center", gap: "40px" }} className="hidden md:flex">
+              {[
+                { label: "Portfolio", href: "#portfolio" },
+                { label: "Projects",  href: "#projects"  },
+                { label: "Philosophy",href: "#philosophy" },
+              ].map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  className="nav-link"
+                  style={{ color: linkColor, fontSize: "13px", fontWeight: "500", letterSpacing: "0.04em" }}
+                >
+                  {label}
+                </a>
+              ))}
+              <a
+                href={WA_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+                style={{
+                  padding: "9px 20px",
+                  fontSize: "11px",
+                  background: scrolled ? "var(--batu)" : "transparent",
+                  color: "var(--padi)",
+                  border: `1.5px solid ${scrolled ? "var(--batu)" : "rgba(238,237,235,0.32)"}`,
+                }}
+              >
+                Get Started <Icon name="arrowUpRight" size={12} />
+              </a>
+            </div>
+
+            {/* Hamburger */}
+            <button
+              aria-label="Toggle menu"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              style={{
+                background: "none", border: "none", cursor: "pointer",
+                padding: "8px", display: "none",
+              }}
+              className="block md:hidden"
+            >
+              {[0, 1, 2].map((i) => (
+                <div key={i} style={{
+                  width: "20px", height: "1.5px",
+                  marginBottom: i < 2 ? "5px" : 0,
+                  background: scrolled ? "var(--batu)" : "var(--padi)",
+                  transformOrigin: "center",
+                  transform: mobileOpen
+                    ? i === 0 ? "rotate(45deg) translate(4.5px, 4.5px)"
+                    : i === 2 ? "rotate(-45deg) translate(4.5px, -4.5px)"
+                    : "none"
+                    : "none",
+                  opacity: (mobileOpen && i === 1) ? 0 : 1,
+                  transition: "transform 0.25s ease, opacity 0.25s ease",
+                }} />
+              ))}
+            </button>
+          </div>
+
+          {/* Mobile drawer */}
+          {mobileOpen && (
+            <div style={{
+              background: "var(--padi)",
+              padding: "8px 24px 24px",
+              borderTop: "1px solid rgba(58,64,52,0.07)",
+            }}>
+              {[
+                { label: "Portfolio", href: "#portfolio" },
+                { label: "Projects",  href: "#projects"  },
+                { label: "Philosophy",href: "#philosophy" },
+              ].map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  style={{
+                    display: "block",
+                    padding: "12px 0",
+                    color: "var(--batu)",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    textDecoration: "none",
+                    borderBottom: "1px solid rgba(58,64,52,0.06)",
+                  }}
+                >
+                  {label}
+                </a>
+              ))}
+              <div style={{ marginTop: "16px" }}>
+                <a
+                  href={WA_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-dark"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Get Started
+                </a>
+              </div>
+            </div>
+          )}
+        </nav>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       Hero — right-side investment card visual
+    ───────────────────────────────────────────── */
+    function InvestmentCard() {
+      return (
+        <div style={{ position: "relative", width: "100%", maxWidth: "400px" }}>
+          {/* Ambient glow */}
+          <div style={{
+            position: "absolute",
+            inset: "-20px",
+            background: "radial-gradient(ellipse at 50% 50%, rgba(147,162,117,0.14) 0%, transparent 70%)",
+            borderRadius: "50%",
+            pointerEvents: "none",
+          }} />
+
+          {/* Card */}
+          <div style={{
+            position: "relative",
+            background: "rgba(238,237,235,0.055)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            border: "1px solid rgba(238,237,235,0.1)",
+            borderRadius: "12px",
+            padding: "28px",
+          }}>
+            {/* Header */}
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "24px" }}>
+              <div>
+                <div style={{ fontSize: "10px", letterSpacing: "0.13em", textTransform: "uppercase", color: "var(--padang)", marginBottom: "5px" }}>
+                  Akura · Satu
+                </div>
+                <div style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "20px", fontWeight: "400", color: "var(--padi)", letterSpacing: "-0.01em" }}>
+                  Canggu, Bali
+                </div>
+              </div>
+              <div style={{
+                background: "rgba(37,211,102,0.14)",
+                border: "1px solid rgba(37,211,102,0.25)",
+                borderRadius: "20px",
+                padding: "4px 11px",
+                display: "flex", alignItems: "center", gap: "5px",
+              }}>
+                <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#25D366" }} />
+                <span style={{ fontSize: "9px", color: "#3dd87c", fontWeight: "600", letterSpacing: "0.07em" }}>AVAILABLE</span>
+              </div>
+            </div>
+
+            {/* Metrics */}
+            {[
+              { label: "Net Annual ROI",  value: "18.5%",      accent: true  },
+              { label: "Avg. Occupancy",  value: "84%",        accent: false },
+              { label: "Entry Price",     value: "from $185k", accent: false },
+              { label: "Est. Payback",    value: "5.4 years",  accent: false },
+            ].map(({ label, value, accent }, i, arr) => (
+              <div
+                key={label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "13px 0",
+                  borderBottom: i < arr.length - 1 ? "1px solid rgba(238,237,235,0.07)" : "none",
+                }}
+              >
+                <span style={{ fontSize: "12px", color: "rgba(238,237,235,0.48)" }}>{label}</span>
+                <span style={{
+                  fontFamily: accent ? "Cormorant Garamond, serif" : "inherit",
+                  fontSize: accent ? "20px" : "14px",
+                  fontWeight: accent ? "400" : "500",
+                  color: accent ? "var(--padang)" : "var(--padi)",
+                  letterSpacing: accent ? "-0.02em" : "0",
+                }}>
+                  {value}
+                </span>
+              </div>
+            ))}
+
+            {/* CTA */}
+            <a
+              href={WA_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-wa"
+              style={{ width: "100%", justifyContent: "center", marginTop: "20px" }}
+            >
+              <Icon name="whatsapp" size={17} /> Request Info Pack
+            </a>
+          </div>
+
+          {/* Urgency badge */}
+          <div style={{
+            position: "absolute",
+            top: "-14px", right: "22px",
+            background: "var(--padang)",
+            borderRadius: "6px",
+            padding: "7px 13px",
+          }}>
+            <span style={{ fontSize: "9px", fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--batu)" }}>
+              2 Units Left
+            </span>
+          </div>
+
+          {/* Decorative corner lines */}
+          <div style={{
+            position: "absolute",
+            bottom: "-18px", left: "-18px",
+            width: "40px", height: "40px",
+            borderLeft: "1px solid rgba(147,162,117,0.28)",
+            borderBottom: "1px solid rgba(147,162,117,0.28)",
+            borderRadius: "0 0 0 4px",
+          }} />
+        </div>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       Hero section
+    ───────────────────────────────────────────── */
+    function Hero() {
+      return (
+        <section
+          id="home"
+          style={{
+            position: "relative",
+            minHeight: "100svh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            overflow: "hidden",
+            background: "var(--batu)",
+          }}
+        >
+          {/* Background gradients */}
+          <div style={{
+            position: "absolute", inset: 0, zIndex: 0,
+            background: `
+              radial-gradient(ellipse at 18% 28%, rgba(147,162,117,0.18) 0%, transparent 55%),
+              radial-gradient(ellipse at 82% 75%, rgba(118,101,92,0.16) 0%, transparent 50%),
+              linear-gradient(145deg, rgba(58,64,52,1) 0%, rgba(74,71,65,0.96) 100%)
+            `,
+          }} />
+
+          {/* Main content */}
+          <div style={{
+            position: "relative", zIndex: 10,
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "0 24px",
+            width: "100%",
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+          }}>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: "48px",
+              alignItems: "center",
+              width: "100%",
+              paddingTop: "96px",
+              paddingBottom: "80px",
+            }}
+            className="lg:grid-cols-2"
+            >
+              {/* Left — Copy */}
+              <div>
+                <div className="reveal" style={{ marginBottom: "28px" }}>
+                  <Eyebrow>Premium Villa Investment · Bali & Lombok</Eyebrow>
+                </div>
+
+                <h1
+                  className="reveal font-display font-light"
+                  style={{
+                    fontSize: "clamp(50px, 7.8vw, 108px)",
+                    letterSpacing: "-0.03em",
+                    color: "var(--padi)",
+                    lineHeight: "0.93",
+                    marginBottom: "28px",
+                    transitionDelay: "80ms",
+                  }}
+                >
+                  Invest in Bali.<br />
+                  <em style={{ fontStyle: "italic", color: "var(--padang)" }}>Live</em> Off Returns.
+                </h1>
+
+                <p
+                  className="reveal font-body"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "300",
+                    color: "rgba(238,237,235,0.62)",
+                    lineHeight: "1.82",
+                    maxWidth: "390px",
+                    marginBottom: "44px",
+                    transitionDelay: "160ms",
+                  }}
+                >
+                  Akura Villas develops premium, investor-grade villas in Bali and Lombok — fully managed, designed to yield, and built to last generations.
+                </p>
+
+                <div
+                  className="reveal"
+                  style={{ display: "flex", flexWrap: "wrap", gap: "12px", transitionDelay: "240ms" }}
+                >
+                  <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-wa">
+                    <Icon name="whatsapp" size={18} /> Get Started
+                  </a>
+                  <a href="#portfolio" className="btn btn-ghost-light">
+                    View Projects <Icon name="arrowDown" size={13} />
+                  </a>
+                </div>
+
+                {/* Social trust */}
+                <div
+                  className="reveal"
+                  style={{
+                    marginTop: "44px",
+                    paddingTop: "28px",
+                    borderTop: "1px solid rgba(238,237,235,0.08)",
+                    transitionDelay: "320ms",
+                  }}
+                >
+                  <p style={{ fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(238,237,235,0.32)", marginBottom: "12px" }}>
+                    Investors from
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+                    {["🇳🇱 Netherlands", "🇩🇪 Germany", "🇦🇺 Australia", "🇺🇸 United States"].map((c) => (
+                      <span key={c} style={{ fontSize: "12px", color: "rgba(238,237,235,0.48)", fontWeight: "400" }}>
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right — Card visual */}
+              <div
+                className="reveal hidden lg:flex items-center justify-center"
+                style={{ transitionDelay: "200ms" }}
+              >
+                <InvestmentCard />
+              </div>
+            </div>
+          </div>
+
+          {/* Stats bar */}
+          <div
+            style={{
+              position: "relative", zIndex: 10,
+              background: "rgba(58,64,52,0.52)",
+              backdropFilter: "blur(18px)",
+              WebkitBackdropFilter: "blur(18px)",
+              borderTop: "1px solid rgba(238,237,235,0.07)",
+            }}
+          >
+            <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px" }}>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "24px",
+              }}
+              className="md:grid-cols-4"
+              >
+                {[
+                  { value: "12+",  label: "Completed Villas"   },
+                  { value: "4",    label: "Active Projects"     },
+                  { value: "8yr",  label: "In Bali Market"      },
+                  { value: "18%",  label: "Avg. Net Annual ROI" },
+                ].map(({ value, label }, i) => (
+                  <div key={label} className="reveal" style={{ transitionDelay: `${i * 80}ms` }}>
+                    <div
+                      className="font-display font-light"
+                      style={{ fontSize: "clamp(28px, 3.5vw, 38px)", color: "var(--padang)", letterSpacing: "-0.02em", lineHeight: 1 }}
+                    >
+                      {value}
+                    </div>
+                    <div style={{ fontSize: "10px", fontWeight: "500", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(238,237,235,0.38)", marginTop: "5px" }}>
+                      {label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       Features — 6 benefit cards
+    ───────────────────────────────────────────── */
+    const FEATURES = [
+      {
+        icon: "trending",
+        title: "Proven ROI-Focused Strategy",
+        desc: "Every project is underwritten to deliver 15–22% net annual returns, with full financial projections shared before you commit.",
+      },
+      {
+        icon: "home",
+        title: "Completely Hands-Off",
+        desc: "Our in-house team handles bookings, maintenance, staffing, and monthly reporting. You collect income — nothing else.",
+      },
+      {
+        icon: "leaf",
+        title: "Sustainable by Design",
+        desc: "Natural materials, passive cooling, and water-independent systems reduce operating costs and attract premium guests.",
+      },
+      {
+        icon: "eye",
+        title: "Full Transparency",
+        desc: "Live dashboards, monthly P&L reports, and legal documentation in plain language — no surprises, ever.",
+      },
+      {
+        icon: "shield",
+        title: "Legally Structured & Secure",
+        desc: "Every project uses a clean, investor-friendly legal structure reviewed by independent Bali property lawyers.",
+      },
+      {
+        icon: "users",
+        title: "A Community of Co-owners",
+        desc: "Join a network of international investors. Quarterly gatherings, shared intel, and genuine long-term community.",
+      },
+    ];
+
+    function Features() {
+      return (
+        <section id="philosophy" style={{ background: "var(--padi)", padding: "100px 0 112px" }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+            {/* Header */}
+            <div style={{ maxWidth: "540px", marginBottom: "60px" }}>
+              <div className="reveal" style={{ marginBottom: "18px" }}>
+                <Eyebrow>Why Akura</Eyebrow>
+              </div>
+              <h2
+                className="reveal font-display font-light"
+                style={{
+                  fontSize: "clamp(36px, 5vw, 62px)",
+                  letterSpacing: "-0.03em",
+                  color: "var(--batu)",
+                  lineHeight: "1.02",
+                  marginBottom: "18px",
+                  transitionDelay: "80ms",
+                }}
+              >
+                Built for investors,<br />
+                <em style={{ fontStyle: "italic" }}>not just buyers.</em>
+              </h2>
+              <p
+                className="reveal font-body"
+                style={{ fontSize: "15px", color: "var(--kabut)", lineHeight: "1.82", transitionDelay: "160ms" }}
+              >
+                We combine premium architecture with institutional-grade investment discipline — so you get a beautiful asset and a reliable return.
+              </p>
+            </div>
+
+            {/* Grid */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(1, 1fr)",
+              gap: "20px",
+            }}
+            className="sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {FEATURES.map(({ icon, title, desc }, i) => (
+                <div
+                  key={title}
+                  className="feature-card reveal"
+                  style={{
+                    background: "#ffffff",
+                    border: "1px solid rgba(58,64,52,0.07)",
+                    borderRadius: "10px",
+                    padding: "28px",
+                    boxShadow: "0 2px 16px rgba(58,64,52,0.045)",
+                    transitionDelay: `${Math.min(i * 80, 320)}ms`,
+                  }}
+                >
+                  {/* Icon bubble */}
+                  <div style={{
+                    width: "46px", height: "46px",
+                    borderRadius: "11px",
+                    background: "rgba(147,162,117,0.13)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "var(--padang)",
+                    marginBottom: "18px",
+                  }}>
+                    <Icon name={icon} size={21} />
+                  </div>
+                  <h3 style={{ fontSize: "15.5px", fontWeight: "500", color: "var(--batu)", marginBottom: "10px", lineHeight: "1.35" }}>
+                    {title}
+                  </h3>
+                  <p style={{ fontSize: "13.5px", color: "var(--kabut)", lineHeight: "1.78" }}>
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       Social Proof — logo strip
+    ───────────────────────────────────────────── */
+    const LOGOS = [
+      { name: "Airbnb",       style: { fontFamily: "Cormorant Garamond, serif", fontSize: "22px", fontWeight: "500", letterSpacing: "-0.01em" } },
+      { name: "Forbes",       style: { fontFamily: "Cormorant Garamond, serif", fontSize: "26px", fontWeight: "600", letterSpacing: "0.04em" } },
+      { name: "Booking.com",  style: { fontFamily: "DM Sans, sans-serif",        fontSize: "13px", fontWeight: "700", letterSpacing: "-0.01em" } },
+      { name: "Tatler Asia",  style: { fontFamily: "Cormorant Garamond, serif", fontSize: "17px", fontWeight: "400", fontStyle: "italic"     } },
+      { name: "Agoda",        style: { fontFamily: "DM Sans, sans-serif",        fontSize: "18px", fontWeight: "700", letterSpacing: "-0.02em" } },
+      { name: "Dezeen",       style: { fontFamily: "DM Sans, sans-serif",        fontSize: "14px", fontWeight: "600", letterSpacing: "0.08em", textTransform: "uppercase" } },
+    ];
+
+    function SocialProof() {
+      return (
+        <section id="portfolio" style={{ background: "var(--kabut)", padding: "72px 0" }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+            <p
+              className="reveal"
+              style={{
+                textAlign: "center",
+                fontSize: "10px",
+                fontWeight: "500",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "rgba(238,237,235,0.32)",
+                marginBottom: "44px",
+              }}
+            >
+              Featured In &amp; Listed On
+            </p>
+
+            <div
+              className="reveal grid grid-cols-3 md:grid-cols-6"
+              style={{
+                gap: "32px 24px",
+                alignItems: "center",
+                justifyItems: "center",
+                transitionDelay: "80ms",
+              }}
+            >
+              {LOGOS.map(({ name, style: logoStyle }) => (
+                <div key={name} className="logo-item" style={{ textAlign: "center" }}>
+                  <span style={{ color: "var(--padi)", ...logoStyle }}>
+                    {name}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Divider */}
+            <div
+              className="reveal"
+              style={{
+                marginTop: "64px",
+                padding: "32px",
+                border: "1px solid rgba(238,237,235,0.08)",
+                borderRadius: "10px",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "24px",
+                alignItems: "center",
+                justifyContent: "space-between",
+                transitionDelay: "160ms",
+              }}
+            >
+              <div>
+                <p style={{ fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(238,237,235,0.35)", marginBottom: "6px" }}>
+                  Investor Average Rating
+                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span className="font-display font-light" style={{ fontSize: "36px", color: "var(--padang)", letterSpacing: "-0.02em" }}>4.9</span>
+                  <div>
+                    <div style={{ display: "flex", gap: "2px" }}>
+                      {[1,2,3,4,5].map(s => (
+                        <span key={s} style={{ color: "var(--padang)", fontSize: "13px" }}>★</span>
+                      ))}
+                    </div>
+                    <span style={{ fontSize: "11px", color: "rgba(238,237,235,0.4)" }}>from 47 verified investors</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
+                {[
+                  "ROI as Projected",
+                  "Transparent Reporting",
+                  "Professional Management",
+                  "Would Reinvest",
+                ].map((tag) => (
+                  <span key={tag} style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    padding: "6px 12px",
+                    border: "1px solid rgba(238,237,235,0.1)",
+                    borderRadius: "20px",
+                    fontSize: "11px",
+                    color: "rgba(238,237,235,0.55)",
+                    background: "rgba(238,237,235,0.03)",
+                  }}>
+                    <Icon name="check" size={11} style={{ color: "var(--padang)" }} /> {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       CTA section
+    ───────────────────────────────────────────── */
+    function CTASection() {
+      return (
+        <section id="projects" style={{ background: "var(--batu)", padding: "104px 0" }}>
+          <div style={{ maxWidth: "680px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
+            <div className="reveal" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "24px" }}>
+              <div style={{ width: "28px", height: "1px", background: "var(--padang)" }} />
+              <span style={{ fontSize: "10px", fontWeight: "500", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--padang)" }}>
+                Start Your Journey
+              </span>
+              <div style={{ width: "28px", height: "1px", background: "var(--padang)" }} />
+            </div>
+
+            <h2
+              className="reveal font-display font-light"
+              style={{
+                fontSize: "clamp(38px, 5.5vw, 74px)",
+                letterSpacing: "-0.03em",
+                color: "var(--padi)",
+                lineHeight: "1.02",
+                marginBottom: "20px",
+                transitionDelay: "80ms",
+              }}
+            >
+              Ready to put your<br />
+              <em style={{ fontStyle: "italic", color: "var(--padang)" }}>money to work?</em>
+            </h2>
+
+            <p
+              className="reveal font-body"
+              style={{
+                fontSize: "16px",
+                fontWeight: "300",
+                color: "rgba(238,237,235,0.58)",
+                lineHeight: "1.82",
+                marginBottom: "44px",
+                transitionDelay: "160ms",
+              }}
+            >
+              Book a 30-minute call with our team. We'll walk you through our current project, financial projections, and answer every question — no pressure, no sales tactics.
+            </p>
+
+            <div
+              className="reveal"
+              style={{ display: "flex", flexWrap: "wrap", gap: "12px", justifyContent: "center", transitionDelay: "240ms" }}
+            >
+              <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-wa" style={{ padding: "15px 32px", fontSize: "12px" }}>
+                <Icon name="whatsapp" size={18} /> Get Started on WhatsApp
+              </a>
+              <a href="mailto:invest@akuravillas.com" className="btn btn-ghost-light" style={{ padding: "15px 32px", fontSize: "12px" }}>
+                <Icon name="mail" size={15} /> Send Us an Email
+              </a>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       Footer
+    ───────────────────────────────────────────── */
+    function Footer() {
+      const year = new Date().getFullYear();
+
+      const SocialBtn = ({ iconName, href, label }) => {
+        const [hovered, setHovered] = useState(false);
+        return (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={label}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            style={{
+              width: "36px", height: "36px",
+              border: `1px solid ${hovered ? "rgba(147,162,117,0.38)" : "rgba(238,237,235,0.1)"}`,
+              borderRadius: "7px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: hovered ? "var(--padang)" : "rgba(238,237,235,0.4)",
+              textDecoration: "none",
+              transition: "border-color 0.2s ease, color 0.2s ease",
+            }}
+          >
+            <Icon name={iconName} size={16} />
+          </a>
+        );
+      };
+
+      const FooterLink = ({ children, href = "#" }) => {
+        const [hovered, setHovered] = useState(false);
+        return (
+          <a
+            href={href}
+            target={href.startsWith("http") ? "_blank" : "_self"}
+            rel={href.startsWith("http") ? "noopener noreferrer" : ""}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            style={{
+              display: "block",
+              fontSize: "13px",
+              color: hovered ? "var(--padi)" : "rgba(238,237,235,0.45)",
+              textDecoration: "none",
+              marginBottom: "10px",
+              transition: "color 0.2s ease",
+            }}
+          >
+            {children}
+          </a>
+        );
+      };
+
+      const FooterColHead = ({ children }) => (
+        <h4 style={{
+          fontSize: "10px",
+          fontWeight: "500",
+          letterSpacing: "0.13em",
+          textTransform: "uppercase",
+          color: "var(--padang)",
+          marginBottom: "16px",
+        }}>
+          {children}
+        </h4>
+      );
+
+      return (
+        <footer style={{
+          background: "var(--batu)",
+          borderTop: "1px solid rgba(238,237,235,0.07)",
+        }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "64px 24px 40px" }}>
+            {/* Top grid */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "40px",
+              marginBottom: "48px",
+            }}
+            className="lg:grid-cols-4"
+            >
+              {/* Brand */}
+              <div style={{ gridColumn: "1 / -1" }} className="lg:col-span-1">
+                <img src="brand assets/2.png" alt="Akura Villas" style={{ height: "34px", width: "auto", marginBottom: "16px" }} />
+                <p style={{ fontSize: "13px", color: "rgba(238,237,235,0.42)", lineHeight: "1.75", maxWidth: "210px", marginBottom: "20px" }}>
+                  Premium villa developments in Bali & Lombok. Built for investors who expect more.
+                </p>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <SocialBtn iconName="instagram" href="#"     label="Instagram" />
+                  <SocialBtn iconName="linkedin"  href="#"     label="LinkedIn"  />
+                  <SocialBtn iconName="whatsapp"  href={WA_LINK} label="WhatsApp" />
+                </div>
+              </div>
+
+              {/* Company */}
+              <div>
+                <FooterColHead>Company</FooterColHead>
+                {["About Us", "Portfolio", "Our Process", "Investor FAQ"].map(l => (
+                  <FooterLink key={l}>{l}</FooterLink>
+                ))}
+              </div>
+
+              {/* Locations */}
+              <div>
+                <FooterColHead>Locations</FooterColHead>
+                {["Canggu", "Seminyak", "Uluwatu", "Lombok"].map(l => (
+                  <FooterLink key={l}>{l}</FooterLink>
+                ))}
+              </div>
+
+              {/* Connect */}
+              <div>
+                <FooterColHead>Connect</FooterColHead>
+                <FooterLink href={WA_LINK}>WhatsApp Us</FooterLink>
+                <FooterLink href="mailto:invest@akuravillas.com">invest@akuravillas.com</FooterLink>
+                <FooterLink href="tel:+62812345678">+62 812 345 678</FooterLink>
+                <FooterLink href="#">Schedule a Call</FooterLink>
+              </div>
+            </div>
+
+            {/* Bottom bar */}
+            <div style={{
+              borderTop: "1px solid rgba(238,237,235,0.07)",
+              paddingTop: "24px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "16px",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}>
+              <p style={{ fontSize: "11px", color: "rgba(238,237,235,0.28)", letterSpacing: "0.04em" }}>
+                © {year} Akura Villas Pte. Ltd. All rights reserved.
+              </p>
+              <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+                {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => {
+                  const [hov, setHov] = useState(false);
+                  return (
+                    <a
+                      key={l} href="#"
+                      onMouseEnter={() => setHov(true)}
+                      onMouseLeave={() => setHov(false)}
+                      style={{
+                        fontSize: "11px",
+                        color: hov ? "rgba(238,237,235,0.6)" : "rgba(238,237,235,0.28)",
+                        textDecoration: "none",
+                        transition: "color 0.2s ease",
+                      }}
+                    >
+                      {l}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       WhatsApp floating button
+    ───────────────────────────────────────────── */
+    function WAFab() {
+      return (
+        <a
+          href={WA_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat with us on WhatsApp"
+          className="wa-fab"
+          style={{
+            position: "fixed",
+            bottom: "24px", right: "24px",
+            width: "52px", height: "52px",
+            borderRadius: "50%",
+            background: "#25D366",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#fff",
+            boxShadow: "0 4px 22px rgba(37,211,102,0.38)",
+            zIndex: 40,
+            textDecoration: "none",
+          }}
+        >
+          <Icon name="whatsapp" size={22} />
+        </a>
+      );
+    }
+
+    /* ─────────────────────────────────────────────
+       App root
+    ───────────────────────────────────────────── */
+    function App() {
+      useReveal();
+
+      return (
+        <React.Fragment>
+          <Nav />
+          <main>
+            <Hero />
+            <Features />
+            <SocialProof />
+            <CTASection />
+          </main>
+          <Footer />
+          <WAFab />
+        </React.Fragment>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
